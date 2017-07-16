@@ -19,11 +19,13 @@ Class A inherits B {
 	test2() : int { 1 };
 	test3() : Int {
 		{
-			a = B + a;
+			a = Double + a;
 			C = a + 5;
 			a * 2;
+			Int;
 		}
 	};
+	test4( : Int;
 };
 
 (* error:  a is not a type identifier *)
