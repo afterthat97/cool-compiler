@@ -27,7 +27,7 @@ More info:
 
 #### Installing & Setup
 
-There are two ways to configure the environmentï¼one is to use the provided pre-configured Linux 
+There are two ways to configure the environment. One is to use the provided pre-configured Linux 
 system via VirtualBox VM, the other is to install directly on your own installation of Linux (Debian-based system required). I prefer the second choice because the download is only 5.5MB, otherwise you would need to download the whole VM image which is over 700MB.
 
 
@@ -58,7 +58,7 @@ More info:
 
 Lexical analysis is the first phase of a compiler. The lexical analyzer breaks the source code into a series of tokens, and passes the data to the parser when it demands.
 
-Completed. Details can be found in this post: [Cool Compiler â Lexical Analysis](https://masterliu.net/archives/774)
+Completed. Details can be found in this post: [Cool Compiler - Lexical Analysis](https://masterliu.net/archives/774)
 
 
 
@@ -70,7 +70,7 @@ Completed. Details can be found in this post: [Cool Compiler â Lexical Anal
 
 Parsing (or syntax analysis) is the second phase of a compiler. A  parser takes the input from a lexical analyzer in the form of token streams and analyzes the source code (token stream) against the production rules to detect any errors in the code. The output of this phase is an abstract syntax tree (AST).
 
-Completed. Details can be found in this post: [Cool Compiler â Parsing](https://masterliu.net/archives/777)
+Completed. Details can be found in this post: [Cool Compiler - Parsing](https://masterliu.net/archives/777)
 
 
 
