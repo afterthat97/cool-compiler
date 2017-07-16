@@ -63,7 +63,7 @@ class    : CLASS TYPEID '{' feature_list '}' ';' {
 
 Attention that list phyla have a distinct set of operations for constructing and accessing lists. For each phylum named X there is a phylum called Xs (except for `Classes`, which is a list of Class nodes) of type List[X]. List functions are defined automatically for each list. 
 
-The function `nil_***()` returns an empty list of type phylum. The function `single_***()` makes a list of length 1 out of its phylum argument. The function `append_***()` appends two lists of phylums. For the example of `formal_list`, whose type is `Formals`ï¼
+The function `nil_***()` returns an empty list of type phylum. The function `single_***()` makes a list of length 1 out of its phylum argument. The function `append_***()` appends two lists of phylums. For the example of `formal_list`, whose type is `Formals`:
 
 <pre>
 formal_list : {
