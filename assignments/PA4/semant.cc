@@ -312,7 +312,7 @@ static method_class* getMethod(Class_ c, Symbol method_name) {
     return 0;
 }
 
-static void checkInheritance() {
+static void check_inheritance() {
     for (ClassTable::iterator it = classTable.begin(); it != classTable.end(); it++)
         if (it->first != Object && classTable.find(it->second->getParentName()) == classTable.end()) {
             curr_class = it->second;
@@ -336,7 +336,7 @@ static void checkInheritance() {
     }
 }
 
-static void checkMain() {
+static void check_main() {
     if (classTable.find(Main) == classTable.end()) {
         semant_error() << "Class Main is not defined.\n";
         return;
@@ -354,7 +354,7 @@ static void checkMain() {
         semant_error(curr_class) << "No 'main' method in class Main.\n";
 }
 
-static void checkMethods() {
+static void check_methods() {
     for (ClassTable::iterator it = classTable.begin(); it != classTable.end(); it++) {
         if (it->first == Object || it->first == IO || it->first == Int || it->first == Bool || it->first == Str) continue;
         Symbol class_name = it->first;
@@ -748,16 +748,16 @@ void program_class::semant() {
 
     install_basic_classes();
     install_classes(classes);
-    checkInheritance();
+    check_inheritance();
     
     if (semant_errors > 0) {
         cerr << "Compilation halted due to static semantic errors." << endl;
         exit(1);
     }
     
-    checkMain();
+    check_main();
     install_methods();
-    checkMethods();
+    check_methods();
 
     if (semant_errors > 0) {
         cerr << "Compilation halted due to static semantic errors." << endl;
