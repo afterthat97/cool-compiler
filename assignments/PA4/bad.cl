@@ -1,1 +1,1 @@
-bad_examples/bad.cl
+bad_examples/bad_dispatch.cl

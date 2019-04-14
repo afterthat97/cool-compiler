@@ -31,8 +31,8 @@ static ostream& semant_error(tree_node *t) {
     return semant_error();
 }
 
-static ostream& internal_error() {
-    error_stream << "Internal error: ";
+static ostream& internal_error(int lineno) {
+    error_stream << "FATAL:" << lineno << ": ";
     return error_stream;
 }
 
@@ -248,7 +248,7 @@ static std::vector<Class_> getInheritanceChain(Class_ c) {
     while (c->getName() != Object) {
         chain.push_back(c);
         if (classTable.find(c->getParentName()) == classTable.end())
-            internal_error() << "invalid inheritance chain.\n";
+            internal_error(__LINE__) << "invalid inheritance chain.\n";
         else
             c = classTable[c->getParentName()];
     }
@@ -260,7 +260,7 @@ static std::vector<Class_> getInheritanceChain(Symbol name) {
     if (name == SELF_TYPE)
         name = curr_class->getName();
     if (classTable.find(name) == classTable.end())
-        internal_error() << name << " not found in class table.\n";
+        internal_error(__LINE__) << name << " not found in class table.\n";
     return getInheritanceChain(classTable[name]);
 }
 
@@ -273,10 +273,10 @@ static bool conform(Symbol name1, Symbol name2) {
         name1 = curr_class->getName();
 
     if (classTable.find(name1) == classTable.end())
-        internal_error() << name1 << " not found in class table.\n";
+        internal_error(__LINE__) << name1 << " not found in class table.\n";
 
     if (classTable.find(name2) == classTable.end())
-        internal_error() << name2 << " not found in class table.\n";
+        internal_error(__LINE__) << name2 << " not found in class table.\n";
     
     Class_ c1 = classTable[name1];
     Class_ c2 = classTable[name2];
@@ -365,7 +365,7 @@ static void check_methods() {
         for (size_t k = 1; k < chain.size(); k++) {
             Class_ ancestor_class = chain[k];
             Features ancestor_features = ancestor_class->getFeatures();
-            objectEnv.enterscope();        
+            objectEnv.enterscope();
             for (int i = ancestor_features->first(); ancestor_features->more(i); i = ancestor_features->next(i)) {
                 if (!ancestor_features->nth(i)->isAttr()) continue;
                 attr_class* attr = static_cast<attr_class*>(ancestor_features->nth(i));
@@ -397,7 +397,9 @@ static void check_methods() {
             } else { // isAttr
                 attr_class* curr_attr = static_cast<attr_class*>(features->nth(i));
                 Symbol expr_type = curr_attr->getInitExpr()->checkType();
-                if (expr_type != No_type && !conform(expr_type, curr_attr->getType()))
+                if (classTable.find(curr_attr->getType()) == classTable.end())
+                    semant_error(curr_attr) << "Class " << curr_attr->getType() << " of attribute " << curr_attr->getName() << " is undefined.\n";
+                else if (classTable.find(expr_type) != classTable.end() && !conform(expr_type, curr_attr->getType()))
                     semant_error(curr_attr) << "Inferred type " << expr_type << " of initialization of attribute " << curr_attr->getName() << " does not conform to declared type " << curr_attr->getType() << ".\n";
             }
 
@@ -451,6 +453,17 @@ Symbol static_dispatch_class::checkType() {
     bool error = false;
     Symbol expr_type = expr->checkType();
 
+    if (this->type_name != SELF_TYPE && classTable.find(this->type_name) == classTable.end()) {
+        semant_error(this) << "Static dispatch to undefined class " << this->type_name << ".\n";
+        type = Object;
+        return type;
+    }
+
+    if (expr_type != SELF_TYPE && classTable.find(expr_type) == classTable.end()) {
+        type = Object;
+        return type;
+    }
+
     if (!conform(expr_type, this->type_name)) {
         error = true;
         semant_error(this) << "Expression type " << expr_type << " does not conform to declared static dispatch type " << this->type_name << ".\n";
@@ -503,6 +516,12 @@ Symbol static_dispatch_class::checkType() {
 Symbol dispatch_class::checkType() {
     bool error = false;
     Symbol expr_type = expr->checkType();
+
+    if (expr_type != SELF_TYPE && classTable.find(expr_type) == classTable.end()) {
+        semant_error(this) << "Dispatch on undefined class " << expr_type << ".\n";
+        type = Object;
+        return type;
+    }
 
     method_class* method = 0;
     std::vector<Class_> chain = getInheritanceChain(expr_type);
@@ -610,7 +629,9 @@ Symbol let_class::checkType() {
     objectEnv.addid(identifier, new Symbol(type_decl));
 
     Symbol init_type = init->checkType();
-    if (init_type != No_type && !conform(init_type, type_decl))
+    if (classTable.find(type_decl) == classTable.end())
+        semant_error(this) << "Class " << type_decl << " of let-bound identifier " << identifier << " is undefined.\n";
+    else if (init_type != No_type && !conform(init_type, type_decl))
         semant_error(this) << "Inferred type " << init_type << " of initialization of " << identifier << " does not conform to identifier's declared type " << type_decl << ".\n";
 
     type = body->checkType();

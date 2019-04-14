@@ -75,9 +75,6 @@ class C {
 Class Main {
     main() : Int {
 	    {
-            (new C)@IO.type_name();
-            (new C)@Object.typename();
-            (new C)@Object.type_name();
             0;
         }
 	};
