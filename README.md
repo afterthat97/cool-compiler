@@ -1,8 +1,6 @@
 # Stanford CS1/CS143 Compilers Course Project - Cool
 
-Click **[here](https://masterliu.net/archives/768)** to view the Chinese version of this post.
-
-Entry to Stanford online Compilers course: **[Link](https://lagunita.stanford.edu/courses/Engineering/Compilers/Fall2014/info)**
+Stanford online course of CS143 Compilers: **[Link](https://lagunita.stanford.edu/courses/Engineering/Compilers/Fall2014/info)**
 
 ## Introduction
 
