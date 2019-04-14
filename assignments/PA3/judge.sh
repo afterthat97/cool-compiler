@@ -1,9 +1,9 @@
 #!/bin/bash
 
-for filename in *_examples/*.cl; do
+for filename in ../../examples/*.cl; do
     echo "--------Test using" $filename "--------"
-    ./refsemant $filename > refout 2> referr
-    ./mysemant $filename > myout 2> myerr
+    ./refparser $filename > refout 2> referr
+    ./myparser $filename > myout 2> myerr
     cat myerr | sort > myerr_sorted
     cat referr | sort > referr_sorted
     if diff refout myout; then

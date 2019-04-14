@@ -55,6 +55,7 @@ bool str_contain_null_char;
   * Define names for regular expressions here.
   */
 
+%option noyywrap
 %x LINE_COMMENT BLOCK_COMMENT STRING
 
 DARROW			=>

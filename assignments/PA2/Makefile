@@ -2,7 +2,7 @@
 ASSN = 2
 CLASS= cs143
 CLASSDIR= ../..
-LIB= -lfl
+LIB=
 
 SRC= cool.flex test.cl README 
 CSRC= lextest.cc utilities.cc stringtab.cc handle_flags.cc
