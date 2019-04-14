@@ -381,13 +381,17 @@ static void check_methods() {
                 for (size_t k = 1; k < chain.size(); k++) {
                     method_class* ancestor_method = getMethod(chain[k], curr_method->getName());
                     if (!ancestor_method) continue;
+
+                    if (curr_method->getReturnType() != ancestor_method->getReturnType())
+                        semant_error(curr_method) << "In redefined method " << curr_method->getName() << ", return type " << curr_method->getReturnType() << " is different from original return type " << ancestor_method->getReturnType() << ".\n";
+
                     Formals curr_formals = curr_method->getFormals();
                     Formals ancestor_formals = ancestor_method->getFormals();
 
                     int k1 = curr_formals->first(), k2 = ancestor_formals->first();
                     while (curr_formals->more(k1) && ancestor_formals->more(k2)) {
                         if (curr_formals->nth(k1)->getType() != ancestor_formals->nth(k2)->getType())
-                            semant_error(curr_method) << "In redefined method " << curr_method->getName() << ", parameter type " << curr_formals->nth(k1)->getType() << " is different from original type " << ancestor_formals->nth(k2)->getType() << ".\n";
+                            semant_error(curr_formals->nth(k1)) << "In redefined method " << curr_method->getName() << ", parameter type " << curr_formals->nth(k1)->getType() << " is different from original type " << ancestor_formals->nth(k2)->getType() << ".\n";
                         k1 = curr_formals->next(k1);
                         k2 = ancestor_formals->next(k2);
                         if (curr_formals->more(k1) xor ancestor_formals->more(k2))

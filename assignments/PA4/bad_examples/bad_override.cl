@@ -30,6 +30,18 @@ class D2 inherits Base {
     };
 };
 
+class D3 inherits Base {
+    add(x: Int, y: Int) : Bool {
+        {
+            a <- x;
+            b <- y;
+            a - b;
+            true;
+        }
+    };
+};
+
+
 class Main {
     main(): Int {
         {
